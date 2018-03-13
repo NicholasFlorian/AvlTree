@@ -19,11 +19,11 @@
  **/
 typedef struct avlNode{
 
-	int delta;///<stores data about tree balancing
-
 	void *data; ///< pointer to generic data that is to be stored in the hash table
-	struct avlNode *left; ///< pointer to the left leaf
-	struct avlNode *right; ///< oointer to the right leaf
+	
+	struct avlNode* parent; ///<parent of avlNode
+	struct avlNode* left; ///< pointer to the left leaf
+	struct avlNode* right; ///< oointer to the right leaf
 	
 } AvlNode;
 
@@ -55,27 +55,23 @@ AvlNode *createAvlNode(void *data);
 
 /**
  **/
-int hasLeft(AvlNode *avlNode);
+int hasAvlLeft(AvlNode *avlNode);
 
 /**
  **/
-int hasRight(AvlNode *avlNode);
+int hasAvlRight(AvlNode *avlNode);
 
 /**
  **/
-int hasLeafs(AvlNode *avlNode);
+int hasAvlLeafs(AvlNode *avlNode);
 
 /**
  **/
-void deleteTree(AvlTree* avlTree);
+void deleteAvlTree(AvlTree* avlTree);
 
 /**
  **/
-void deleteDFS(AvlTree* avlTree, AvlNode *avlNode);
-
-/**
- **/
-void deleteNode(AvlTree* avlTree, AvlNode *avlNode);
+void deleteAvlNode(AvlTree* avlTree, AvlNode *avlNode);
 
 
 #endif

@@ -51,7 +51,7 @@ AvlNode *createAvlNode(void *data){
 	
 }
 
-int hasLeft(AvlNode *avlNode){
+int hasAvlLeft(AvlNode *avlNode){
 	
 	//soften input
 	if(avlNode == NULL)
@@ -65,7 +65,7 @@ int hasLeft(AvlNode *avlNode){
 	
 }
 
-int hasRight(AvlNode *avlNode){
+int hasAvlRight(AvlNode *avlNode){
 	
 	//soften input
 	if(avlNode == NULL)
@@ -79,36 +79,54 @@ int hasRight(AvlNode *avlNode){
 	
 }
 
-int hasLeafs(AvlNode *avlNode){
+int hasAvlLeafs(AvlNode *avlNode){
 	
 	//soften input
 	if(avlNode == NULL)
 		return 0;
 	
 	//check
-	if(hasRight(avlNode) || hasLeft(avlNode))
+	if(hasAvlRight(avlNode) || hasAvlLeft(avlNode))
 		return 1;
 	
 	return 0;
 	
 }
 
-
-void deleteTree(AvlTree* avlTree){
+int heightAvl(AvlNode *avlNode, int hieght){
+	
+	//var
+	int left;
+	int right;
+	
+	
+	//set values
+	left = 0;
+	right = 0;
 	
 	//soften input
-	if(avlTree == NULL)
-		return;
+	if(avlNode == NULL)
+		return height;
 	
-	//free nodes
-	deleteDFS(avlTree, avlTree->head);
+	//get child hieghts
+	if(hasAvlLeft(avlNode))
+		left = hieght(avlNode->left, hieght);
 	
-	//delete rest of data
-	free(avlTree);
+	if(hasAvlRight(avlNode))
+		right = hieght(avlNode->right, hieght);
 
+
+	//return max
+	if(right > left)
+		return ++right;
+	else
+		return ++left;
+	
 }
 
-void deleteDFS(AvlTree* avlTree, AvlNode *avlNode){
+void deleteAvlTree(AvlTree* avlTree, AvlNode *avlNode){
+	
+	//Use DFS
 	
 	//soften input
 	if(avlNode == NULL)
@@ -118,18 +136,20 @@ void deleteDFS(AvlTree* avlTree, AvlNode *avlNode){
 		return;
 	
 	//recursive run through
-	if(hasLeft(avlNode))
+	if(hasAvlLeft(avlNode))
 		deleteDFS(avlTree, avlNode->left);
 	
-	if(hasRight(avlNode))
+	if(hasAvlRight(avlNode))
 		deleteDFS(avlTree, avlNode->right);
 	
 	//delete node
 	deleteNode(avlTree, avlNode);
 	
+	free(avlTree);
+	
 }
 
-void deleteNode(AvlTree* avlTree, AvlNode *avlNode){
+void deleteAvlNode(AvlTree* avlTree, AvlNode *avlNode){
 	
 	//soften input
 	if(avlNode == NULL)
@@ -145,26 +165,12 @@ void deleteNode(AvlTree* avlTree, AvlNode *avlNode){
 	
 }
 
-void insertData(AvlTree* avlTree, void* data){
+void insertAvlData(AvlTree* avlTree, void* data){
 	
 	//var
 	AvlNode* insertNode;
 	
 	
-	//create node
-	insertNode = createAvlNode(data);
-	
-	//insert it
-	insertNode(avlTree, avlTree->head, insertNode);
-	
-	//rebalance tree
-	balanceTree(avlTree);
-	
-	
-}
-
-void insertNode(avlTree* avlTree, AvlNode* iter, AvlNode *avlNode){
-
 	//soften input
 	if(avlNode == NULL)
 		return;
@@ -172,6 +178,26 @@ void insertNode(avlTree* avlTree, AvlNode* iter, AvlNode *avlNode){
 	if(avlTree == NULL)
 		return;
 	
+	
+	//create node
+	insertNode = createAvlNode(data);
+	
+	//insert it
+	insertAvlNode(avlTree, avlTree->head, insertNode);
+	
+	//rebalance tree
+	balanceAvlTree(avlTree, avlTree->next);
+	
+}
+
+void insertAvlNode(avlTree* avlTree, AvlNode* iter, AvlNode *avlNode){
+
+	//soften input
+	if(avlNode == NULL)
+		return;
+	
+	if(avlTree == NULL)
+		return;
 	
 	//go until the tree is empty
 	if(iter == NULL){
@@ -181,7 +207,7 @@ void insertNode(avlTree* avlTree, AvlNode* iter, AvlNode *avlNode){
 		
 	}
 	
-	//else move to next leaf
+	//binary search next leaf
 	if(avlTree->compareData(avlNode->data, iter->data))
 		inserNode(avlTree, iter->right, avlNode);
 	else
@@ -191,9 +217,55 @@ void insertNode(avlTree* avlTree, AvlNode* iter, AvlNode *avlNode){
 	
 }
 
-void balanceTree(AvlTree *avlTree){
+void balanceAvlTree(AvlTree* avlTree, AvlNode* avlNode){
+	
+	//var
+	int balance;
+	
+	//leave recursion
+	if(avlNode == NULL)
+		return;
+	
+	//recursive run through
+	if(hasAvlLeft(avlNode))
+		balanceAvlTree(avlTree, avlNode->left);
+	
+	if(hasAvlRight(avlNode))
+		rebalance(avlTree, avlNode->right);
+
+	
+	balance = balanceAvlNode(avlTree, avlNode);
 	
 	
+	if(balance >= 2)
+		if(avlBalanceNode(avlTree, avlNode->left))
+			
 	
 }
+
+int balanceAvlNode(AvlTree* avlTree, AvlNode* avlNode){
+	
+	//var
+	int balance;
+	
+	
+	//set defualt values
+	balance = 0;
+	
+	//assing balance
+	if(hasAvlLeft(avlNode))
+		balance += heightAvl(avlNode->left, 0);
+	
+	if(hasAvlRight(avlNode))
+		balance -= heightAvl(avlNode->right, 0);
+	
+	return balance;
+	
+}
+
+
+
+
+
+
 
