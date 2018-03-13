@@ -51,5 +51,29 @@ AvlTree *createAvlTree(void (*deleteData)(void *data), char* (*printData)(void *
  **/
 AvlNode *createHashNode(void *data);
 
+/**
+ **/
+int hasLeft(AvlNode *avlNode);
+
+/**
+ **/
+int hasRight(AvlNode *avlNode);
+
+/**
+ **/
+int hasLeafs(AvlNode *avlNode);
+
+/**
+ **/
+void deleteTree(AvlTree* avlTree);
+
+/**
+ **/
+void deleteDFS(AvlTree* avlTree, AvlNode *avlNode);
+
+/**
+ **/
+void deleteNode(AvlTree* avlTree, AvlNode *avlNode);
+
 
 #endif

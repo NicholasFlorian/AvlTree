@@ -36,10 +36,12 @@ AvlNode *createHashNode(void *data){
 	
 	//assign values
 	avlNode = malloc(sizeof(AvlNode));
-
+	
+	//check if memory was successfully allocated
 	if(avlNode == NULL)
 		return NULL;
 	
+	//set NULL values
 	avlNode->data = data;
 	
 	avlNode->left = NULL;
@@ -48,3 +50,98 @@ AvlNode *createHashNode(void *data){
 	return avlNode;
 	
 }
+
+int hasLeft(AvlNode *avlNode){
+	
+	//soften input
+	if(avlNode == NULL)
+		return 0;
+	
+	//check
+	if(avlNode->left != NULL)
+		return 1;
+	
+	return 0;
+	
+}
+
+int hasRight(AvlNode *avlNode){
+	
+	//soften input
+	if(avlNode == NULL)
+		return 0;
+	
+	//check
+	if(avlNode->right != NULL)
+		return 1;
+	
+	return 0;
+	
+}
+
+int hasLeafs(AvlNode *avlNode){
+	
+	//soften input
+	if(avlNode == NULL)
+		return 0;
+	
+	//check
+	if(hasRight(avlNode) || hasLeft(avlNode))
+		return 1;
+	
+	return 0;
+	
+}
+
+
+void deleteTree(AvlTree* avlTree){
+	
+	//soften input
+	if(avlTree == NULL)
+		return;
+	
+	//free nodes
+	deleteDFS(avlTree, avlTree->head);
+	
+	//delete rest of data
+	free(avlTree);
+
+}
+
+void deleteDFS(AvlTree* avlTree, AvlNode *avlNode){
+	
+	//soften input
+	if(avlNode == NULL)
+		return;
+	
+	if(avlTree == NULL)
+		return;
+	
+	//recursive run through
+	if(hasLeft(avlNode))
+		deleteDFS(avlTree, avlNode->left);
+	
+	if(hasRight(avlNode))
+		deleteDFS(avlTree, avlNode->right);
+	
+	//delete node
+	deleteNode(avlTree, avlNode);
+	
+}
+
+void deleteNode(AvlTree* avlTree, AvlNode *avlNode){
+	
+	//soften input
+	if(avlNode == NULL)
+		return;
+	
+	if(avlTree == NULL)
+		return;
+	
+	//delete data
+	avlTree->deleteData(avlNode->data);
+	
+	free(avlNode);
+	
+}
+

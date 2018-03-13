@@ -11,6 +11,8 @@ int main(int args, char **argv){
 	
 	intAvlTree = createAvlTree(&deleteInt, &printInt, &compareInts);
 	
+	deleteTree(intAvlTree);
+	
 	return 0;
 	
 }
