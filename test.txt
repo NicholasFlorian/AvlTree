@@ -1,0 +1,10 @@
+make clean
+test
+this
+sucks
+LEN <91> ACTUAL <83>
+SIZE <27> COUNT <4>
+STRING <make clean>
+STRING <test>
+STRING <this>
+STRING <sucks>
