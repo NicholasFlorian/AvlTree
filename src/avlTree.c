@@ -29,7 +29,7 @@ AvlTree *createAvlTree(void (*deleteData)(void *data), char* (*printData)(void *
 	
 }
 
-AvlNode *createHashNode(void *data){
+AvlNode *createAvlNode(void *data){
 	
 	//var
 	AvlNode* avlNode;
@@ -142,6 +142,58 @@ void deleteNode(AvlTree* avlTree, AvlNode *avlNode){
 	avlTree->deleteData(avlNode->data);
 	
 	free(avlNode);
+	
+}
+
+void insertData(AvlTree* avlTree, void* data){
+	
+	//var
+	AvlNode* insertNode;
+	
+	
+	//create node
+	insertNode = createAvlNode(data);
+	
+	//insert it
+	insertNode(avlTree, avlTree->head, insertNode);
+	
+	//rebalance tree
+	balanceTree(avlTree);
+	
+	
+}
+
+void insertNode(avlTree* avlTree, AvlNode* iter, AvlNode *avlNode){
+
+	//soften input
+	if(avlNode == NULL)
+		return;
+	
+	if(avlTree == NULL)
+		return;
+	
+	
+	//go until the tree is empty
+	if(iter == NULL){
+		
+		iter = avlNode;
+		return;
+		
+	}
+	
+	//else move to next leaf
+	if(avlTree->compareData(avlNode->data, iter->data))
+		inserNode(avlTree, iter->right, avlNode);
+	else
+		inserNode(avlTree, iter->left, avlNode);
+	
+	return;
+	
+}
+
+void balanceTree(AvlTree *avlTree){
+	
+	
 	
 }
 
