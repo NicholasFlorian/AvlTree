@@ -207,9 +207,9 @@ void insertAvlData(AvlTree* avlTree, void* data){
 	//insert it
 	insertAvlNode(avlTree, &avlTree->head, insertNode);
 	
-	char* temp = printAvlTree(avlTree);
-	printf("%s\n", temp);
-	free(temp);
+	//char* temp = printAvlTree(avlTree);
+	//printf("%s\n", temp);
+	//free(temp);
 	
 	//rebalance tree
 	balanceAvlTree(avlTree);
@@ -235,7 +235,9 @@ void insertAvlNode(AvlTree* avlTree, AvlNode** iter, AvlNode *avlNode){
 	}
 	
 	//binary search next leaf
-	if(avlTree->compareData(avlNode->data, (*iter)->data))
+	//printf("COMPRARE <%d>\n", avlTree->compareData(avlNode->data, (*iter)->data));
+	
+	if(avlTree->compareData((*iter)->data, avlNode->data) == -1)
 		insertAvlNode(avlTree, &(*iter)->right, avlNode);
 	else
 		insertAvlNode(avlTree, &(*iter)->left, avlNode);
@@ -324,9 +326,11 @@ char* printAvlNode(AvlTree* avlTree, AvlNode* avlNode){
 	string = malloc(sizeof(char));
 	string[0] = '\0';
 	
+	
 	//recursive run through
 	if(hasAvlLeft(avlNode)){
 		
+		//printf("XX GO LEFT  >");
 		//var
 		char *t;
 		
@@ -344,6 +348,8 @@ char* printAvlNode(AvlTree* avlTree, AvlNode* avlNode){
 			
 			strcat(string, t);
 			
+			//printf("%s", t);
+			
 			free(t);
 			
 		}
@@ -358,8 +364,10 @@ char* printAvlNode(AvlTree* avlTree, AvlNode* avlNode){
 	
 	strcat(string, temp);
 	
+	
+	
 	if(hasAvlRight(avlNode)){
-		
+		//printf("XX GO RIGHT >");
 		//var
 		char *t;
 		
@@ -375,6 +383,8 @@ char* printAvlNode(AvlTree* avlTree, AvlNode* avlNode){
 							 (sizeof(char) * (strlen(t) + 1)));
 			
 			strcat(string, t);
+			
+			//printf("%s", t);
 			
 			free(t);
 			
@@ -416,12 +426,12 @@ AvlNode* balanceAvlNode(AvlTree* avlTree, AvlNode* avlNode){
 	if(hasAvlRight(avlNode))
 		avlNode->right = balanceAvlNode(avlTree, avlNode->right);
 	
-	printf("DELTA %d\n", deltaAvl(avlTree, avlNode));
+	//printf("DELTA %d\n", deltaAvl(avlTree, avlNode));
 	
 	//Rotate
 	if(deltaAvl(avlTree, avlNode) >= 2){
 		
-		if(deltaAvl(avlTree, avlNode) <= -1)
+		if(deltaAvl(avlTree, avlNode->left) <= -1)
 			return lrAvl(avlNode);
 		else
 			return llAvl(avlNode);
@@ -429,7 +439,7 @@ AvlNode* balanceAvlNode(AvlTree* avlTree, AvlNode* avlNode){
 	}
 	else if(deltaAvl(avlTree, avlNode) <= -2){
 		
-		if(deltaAvl(avlTree, avlNode) >= 1)
+		if(deltaAvl(avlTree, avlNode->right) >= 1)
 			return rlAvl(avlNode);
 		else
 			return rrAvl(avlNode);
@@ -474,7 +484,7 @@ AvlNode* llAvl(AvlNode* avlNode){
 	a->left = b->right;
 	b->right = a;
 	
-	printf("LL\n");
+	//printf("LL\n");
 	
 	return(b);
 	
@@ -499,7 +509,7 @@ AvlNode* lrAvl(AvlNode* avlNode){
 	c->left = b;
 	c->right = a;
 	
-		printf("LRs\n");
+		//printf("LRs\n");
 	
 	return(c);
 	
@@ -524,7 +534,7 @@ AvlNode* rlAvl(AvlNode* avlNode){
 	c->right = b;
 	c->left = a;
 	
-		printf("RL\n");
+		///printf("RL\n");
 	
 	return(b);
 	
@@ -545,7 +555,7 @@ AvlNode* rrAvl(AvlNode* avlNode){
 	a->right = b->left;
 	b->left = a;
 	
-		printf("RR\n");
+		//printf("RR\n");
 	
 	return(b);
 	
