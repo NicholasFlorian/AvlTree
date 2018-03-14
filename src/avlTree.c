@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "avlTree.h"
 
 
@@ -93,6 +94,16 @@ int hasAvlLeafs(AvlNode *avlNode){
 	
 }
 
+int getHeightAvl(AvlNode *avlNode){
+	
+	//soften input
+	if(avlNode == NULL)
+		return 0;
+	
+	return heightAvl(avlNode, 0);
+	
+}
+
 int heightAvl(AvlNode *avlNode, int hieght){
 	
 	//var
@@ -106,16 +117,16 @@ int heightAvl(AvlNode *avlNode, int hieght){
 	
 	//soften input
 	if(avlNode == NULL)
-		return height;
+		return hieght;
 	
 	//get child hieghts
 	if(hasAvlLeft(avlNode))
-		left = hieght(avlNode->left, hieght);
+		left = getHeightAvl(avlNode->left);
 	
 	if(hasAvlRight(avlNode))
-		right = hieght(avlNode->right, hieght);
-
-
+		right = getHeightAvl(avlNode->right);
+	
+	
 	//return max
 	if(right > left)
 		return ++right;
@@ -124,9 +135,23 @@ int heightAvl(AvlNode *avlNode, int hieght){
 	
 }
 
-void deleteAvlTree(AvlTree* avlTree, AvlNode *avlNode){
+
+void deleteAvlTree(AvlTree* avlTree){
 	
-	//Use DFS
+	//soften input
+	if(avlTree == NULL)
+		return;
+	
+	//delete node
+	deleteAvl(avlTree, avlTree->head);
+	
+	free(avlTree);
+	
+}
+
+void deleteAvl(AvlTree* avlTree, AvlNode *avlNode){
+	
+	//Uses DFS
 	
 	//soften input
 	if(avlNode == NULL)
@@ -137,15 +162,13 @@ void deleteAvlTree(AvlTree* avlTree, AvlNode *avlNode){
 	
 	//recursive run through
 	if(hasAvlLeft(avlNode))
-		deleteDFS(avlTree, avlNode->left);
+		deleteAvl(avlTree, avlNode->left);
 	
 	if(hasAvlRight(avlNode))
-		deleteDFS(avlTree, avlNode->right);
+		deleteAvl(avlTree, avlNode->right);
 	
 	//delete node
-	deleteNode(avlTree, avlNode);
-	
-	free(avlTree);
+	deleteAvlNode(avlTree, avlNode);
 	
 }
 
@@ -172,10 +195,10 @@ void insertAvlData(AvlTree* avlTree, void* data){
 	
 	
 	//soften input
-	if(avlNode == NULL)
+	if(avlTree == NULL)
 		return;
 	
-	if(avlTree == NULL)
+	if(data == NULL)
 		return;
 	
 	
@@ -186,12 +209,12 @@ void insertAvlData(AvlTree* avlTree, void* data){
 	insertAvlNode(avlTree, avlTree->head, insertNode);
 	
 	//rebalance tree
-	balanceAvlTree(avlTree, avlTree->next);
+	balanceAvlTree(avlTree);
 	
 }
 
-void insertAvlNode(avlTree* avlTree, AvlNode* iter, AvlNode *avlNode){
-
+void insertAvlNode(AvlTree* avlTree, AvlNode* iter, AvlNode *avlNode){
+	
 	//soften input
 	if(avlNode == NULL)
 		return;
@@ -209,41 +232,183 @@ void insertAvlNode(avlTree* avlTree, AvlNode* iter, AvlNode *avlNode){
 	
 	//binary search next leaf
 	if(avlTree->compareData(avlNode->data, iter->data))
-		inserNode(avlTree, iter->right, avlNode);
+		insertAvlNode(avlTree, iter->right, avlNode);
 	else
-		inserNode(avlTree, iter->left, avlNode);
+		insertAvlNode(avlTree, iter->left, avlNode);
+	
+	balanceAvlTree(avlTree);
 	
 	return;
 	
 }
 
-void balanceAvlTree(AvlTree* avlTree, AvlNode* avlNode){
+char* printAvlTree(AvlTree* avlTree){
 	
 	//var
-	int balance;
-	
-	//leave recursion
-	if(avlNode == NULL)
-		return;
-	
-	//recursive run through
-	if(hasAvlLeft(avlNode))
-		balanceAvlTree(avlTree, avlNode->left);
-	
-	if(hasAvlRight(avlNode))
-		rebalance(avlTree, avlNode->right);
-
-	
-	balance = balanceAvlNode(avlTree, avlNode);
+	char* string;
+	char* t;
 	
 	
-	if(balance >= 2)
-		if(avlBalanceNode(avlTree, avlNode->left))
-			
+	//soften input
+	if(avlTree == NULL)
+		return NULL;
+	
+	//create start of print
+	string = malloc(sizeof(char) * 9);
+	if(string == NULL)
+		return NULL;
+	strcpy(string,"AvlTree\n");
+	
+	//check head
+	if(avlTree->head == NULL)
+		return string;
+	
+	
+	//print data in nodes
+	t = printAvlNode(avlTree, avlTree->head);
+	
+	//soften input
+	if(t == NULL)
+		return string;
+	
+	//adjust amount
+	string = realloc(string,
+					 (sizeof(char) * strlen(string)) +
+					 (sizeof(char) * (strlen(t) + 1)));
+	
+	strcat(string, t);
+	
+	
+	return string;
 	
 }
 
-int balanceAvlNode(AvlTree* avlTree, AvlNode* avlNode){
+char* printAvlNode(AvlTree* avlTree, AvlNode* avlNode){
+	
+	//var
+	char* string;
+	
+	
+	//soften input
+	if(avlNode == NULL)
+		return NULL;
+	
+	if(avlTree == NULL)
+		return NULL;
+	
+	//create start of print
+	string = malloc(sizeof(char) * 9);
+	if(string == NULL)
+		return NULL;
+	strcpy(string,"AvlTree\n");
+	
+	//check head
+	if(avlTree->head == NULL)
+		return string;
+	
+	
+	//recursive run through
+	if(hasAvlLeft(avlNode)){
+		
+		//var
+		char *t;
+		
+		//print data in nodes
+		t = printAvlNode(avlTree, avlNode->left);
+		
+		//soften input
+		if(t != NULL){
+			
+			
+			//adjust amount
+			string = realloc(string,
+							 (sizeof(char) * strlen(string)) +
+							 (sizeof(char) * (strlen(t) + 1)));
+			
+			strcat(string, t);
+			
+		}
+		
+	}
+	
+	if(hasAvlRight(avlNode)){
+		
+		//var
+		char *t;
+		
+		//print data in nodes
+		t = printAvlNode(avlTree, avlNode->right);
+		
+		//soften input
+		if(t != NULL){
+			
+			//adjust amount
+			string = realloc(string,
+							 (sizeof(char) * strlen(string)) +
+							 (sizeof(char) * (strlen(t) + 1)));
+			
+			strcat(string, t);
+			
+		}
+		
+	}
+	
+	return string;
+
+}
+
+void balanceAvlTree(AvlTree* avlTree){
+	
+	//soften input
+	if(avlTree == NULL)
+		return;
+	
+	if(avlTree->head == NULL)
+		return;
+	
+	//balance tree
+	balanceAvlTree(avlTree);
+	
+}
+
+AvlNode* balanceAvlNode(AvlTree* avlTree, AvlNode* avlNode){
+	
+	//leave recursion
+	if(avlNode == NULL)
+		return avlNode;
+	
+	if(!hasAvlLeafs(avlNode))
+		return avlNode;
+	
+	//recursive run through
+	if(hasAvlLeft(avlNode))
+		balanceAvlNode(avlTree, avlNode->left);
+	
+	if(hasAvlRight(avlNode))
+		balanceAvlNode(avlTree, avlNode->right);
+	
+	//Rotate
+	if(deltaAvl(avlTree, avlNode) >= 2){
+		
+		if(deltaAvl(avlTree, avlNode) <= -1)
+			return lrAvl(avlNode);
+		else
+			return llAvl(avlNode);
+		
+	}
+	else if(deltaAvl(avlTree, avlNode) <= -2){
+		
+		if(deltaAvl(avlTree, avlNode) >= 1)
+			return rlAvl(avlNode);
+		else
+			return rrAvl(avlNode);
+		
+	}
+	
+	return avlNode;
+}
+
+int deltaAvl(AvlTree* avlTree, AvlNode* avlNode){
 	
 	//var
 	int balance;
@@ -263,8 +428,93 @@ int balanceAvlNode(AvlTree* avlTree, AvlNode* avlNode){
 	
 }
 
+AvlNode* llAvl(AvlNode* avlNode){
+	
+	//var
+	AvlNode* a;
+	AvlNode* b;
+	
+	
+	//assign
+	a = avlNode;
+	b = a->left;
+	
+	//switch
+	a->left = b->right;
+	b->right = a;
+	
+	
+	return(b);
+	
+}
 
+AvlNode* lrAvl(AvlNode* avlNode){
+	
+	//var
+	AvlNode* a;
+	AvlNode* b;
+	AvlNode* c;
+	
+	
+	//assign
+	a = avlNode;
+	b = a->left;
+	c = b->right;
+	
+	//switch
+	a->left = c->right;
+	b->right = c->left;
+	c->left = b;
+	c->right = a;
+	
+	
+	return(c);
+	
+}
 
+AvlNode* rlAvl(AvlNode* avlNode){
+	
+	//var
+	AvlNode* a;
+	AvlNode* b;
+	AvlNode* c;
+	
+	
+	//assign
+	a = avlNode;
+	b = a->right;
+	c = b->left;
+	
+	//switch
+	a->right = c->left;
+	b->left = c->right;
+	c->right = b;
+	c->left = a;
+	
+	
+	return(b);
+	
+}
+
+AvlNode* rrAvl(AvlNode* avlNode){
+	
+	//var
+	AvlNode* a;
+	AvlNode* b;
+	
+	
+	//assign
+	a = avlNode;
+	b = a->right;
+	
+	//switch
+	a->right = b->left;
+	b->left = a;
+	
+	
+	return(b);
+	
+}
 
 
 

@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /**
  *Node of the avlTree.
@@ -65,13 +66,39 @@ int hasAvlRight(AvlNode *avlNode);
  **/
 int hasAvlLeafs(AvlNode *avlNode);
 
+int getHeightAvl(AvlNode *avlNode);
+
+int heightAvl(AvlNode *avlNode, int hieght);
+
 /**
  **/
-void deleteAvlTree(AvlTree* avlTree);
+void deleteAvl(AvlTree* avlTree, AvlNode* avlNode);
 
 /**
  **/
 void deleteAvlNode(AvlTree* avlTree, AvlNode *avlNode);
 
+void insertAvlData(AvlTree* avlTree, void* data);
 
+void insertAvlNode(AvlTree* avlTree, AvlNode* iter, AvlNode *avlNode);
+
+char* printAvlTree(AvlTree* avlTree);
+
+char* printAvlNode(AvlTree* avlTree, AvlNode* avlNode);
+
+void balanceAvlTree(AvlTree* avlTree);
+
+AvlNode* balanceAvlNode(AvlTree* avlTree, AvlNode* avlNode);
+
+int deltaAvl(AvlTree* avlTree, AvlNode* avlNode);
+
+AvlNode* llAvl(AvlNode* avlNode);
+
+AvlNode* lrAvl(AvlNode* avlNode);
+
+AvlNode* rlAvl(AvlNode* avlNode);
+
+AvlNode* rrAvl(AvlNode* avlNode);
+
+void deleteAvlTree(AvlTree* avlTree);
 #endif
