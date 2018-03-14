@@ -20,12 +20,10 @@ int main(int args, char **argv){
 		in = malloc(sizeof(int));
 		
 		srand(time(NULL));
-		*in = rand();
+		*in = i;
 		
 		insertAvlData(intAvlTree, in);
-		
-		printf("%d \n", in);
-		
+	
 	}
 	
 	s = printAvlTree(intAvlTree);

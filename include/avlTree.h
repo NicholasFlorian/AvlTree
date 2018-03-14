@@ -78,26 +78,40 @@ void deleteAvl(AvlTree* avlTree, AvlNode* avlNode);
  **/
 void deleteAvlNode(AvlTree* avlTree, AvlNode *avlNode);
 
+
+/**
+ **/
 void insertAvlData(AvlTree* avlTree, void* data);
 
-void insertAvlNode(AvlTree* avlTree, AvlNode* iter, AvlNode *avlNode);
+/**
+ **/
+void insertAvlNode(AvlTree* avlTree, AvlNode** iter, AvlNode *avlNode);
 
+/**
+ **/
 char* printAvlTree(AvlTree* avlTree);
 
+/**
+ **/
 char* printAvlNode(AvlTree* avlTree, AvlNode* avlNode);
 
+/**
+ **/
 void balanceAvlTree(AvlTree* avlTree);
 
+/**
+ **/
 AvlNode* balanceAvlNode(AvlTree* avlTree, AvlNode* avlNode);
 
+/**
+ **/
 int deltaAvl(AvlTree* avlTree, AvlNode* avlNode);
 
+/**
+ **/
 AvlNode* llAvl(AvlNode* avlNode);
-
 AvlNode* lrAvl(AvlNode* avlNode);
-
 AvlNode* rlAvl(AvlNode* avlNode);
-
 AvlNode* rrAvl(AvlNode* avlNode);
 
 void deleteAvlTree(AvlTree* avlTree);
